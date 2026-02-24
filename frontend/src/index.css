@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ── CSS Custom Properties ── */
+:root {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --color-primary: #6c63ff;
+  --color-primary-dark: #574fd6;
+  --color-accent: #f59e0b;
+  --color-bg: #0f0f1a;
+  --color-surface: #1a1a2e;
+  --color-surface-2: #16213e;
+  --color-text: #e2e8f0;
+  --color-text-muted: #94a3b8;
+  --color-border: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 3px; }
+
+/* ── Selection ── */
+::selection { background: var(--color-primary); color: white; }
