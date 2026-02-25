@@ -139,22 +139,23 @@ Tasks
 
 Phase 3: Audio Extraction Module
 
-Status: Not Started
+Status: ✅ COMPLETED
+Completed On: 2026-02-25
 Estimated Time: 3–5 days
 
 Tasks
 
- Install FFmpeg
+✅ Install FFmpeg (v8.0.1 confirmed on system PATH)
 
- Integrate FFmpeg with backend
+✅ Integrate FFmpeg with backend (ffmpeg-python wrapper + subprocess)
 
- Extract audio from video
+✅ Extract audio from video (POST /api/videos/{id}/extract-audio)
 
- Save audio file
+✅ Save audio file (mono 16 kHz WAV in /audio/ dir, Whisper-optimised)
 
- Handle extraction failures
+✅ Handle extraction failures (status machine: FAILED + error_message in DB)
 
- Optimize extraction speed
+✅ Optimize extraction speed (thread-pool executor keeps event loop free, -hwaccel auto)
 
 Phase 4: Speech-to-Text Transcription
 

@@ -1,12 +1,14 @@
-from fastapi import APIRouter, UploadFile, File, Form, Query, HTTPException
+from fastapi import APIRouter, UploadFile, File, Form, Query, HTTPException, BackgroundTasks
 from fastapi.responses import JSONResponse
 from typing import Optional
 
 from app.models.video import VideoResponse, VideoListResponse
-from app.services import video_service
+from app.services import video_service, audio_service
 
 router = APIRouter()
 
+
+# ─── Upload ───────────────────────────────────────────────────────────────────
 
 @router.post(
     "/upload",
@@ -15,7 +17,7 @@ router = APIRouter()
     summary="Upload a video file",
     description=(
         "Upload a video file (mp4, avi, mov, mkv, webm). "
-        "The file is validated, saved to storage, and its metadata is persisted in MongoDB."
+        "The file is validated, saved to storage, and metadata persisted in MongoDB."
     ),
 )
 async def upload_video(
@@ -25,6 +27,8 @@ async def upload_video(
 ):
     return await video_service.upload_video(file, title, description)
 
+
+# ─── List & Get ───────────────────────────────────────────────────────────────
 
 @router.get(
     "/",
@@ -49,6 +53,8 @@ async def get_video(video_id: str):
     return await video_service.get_video_by_id(video_id)
 
 
+# ─── Delete ───────────────────────────────────────────────────────────────────
+
 @router.delete(
     "/{video_id}",
     summary="Delete a video",
@@ -57,3 +63,36 @@ async def get_video(video_id: str):
 async def delete_video(video_id: str):
     result = await video_service.delete_video(video_id)
     return JSONResponse(content=result)
+
+
+# ─── Audio Extraction (Phase 3) ───────────────────────────────────────────────
+
+@router.post(
+    "/{video_id}/extract-audio",
+    response_model=VideoResponse,
+    summary="Extract audio from video",
+    description=(
+        "Triggers FFmpeg to extract audio from the uploaded video file. "
+        "Audio is saved as mono 16 kHz WAV (optimised for Whisper STT). "
+        "The video status transitions: uploaded → extracting_audio → audio_ready."
+    ),
+)
+async def extract_audio(video_id: str):
+    return await audio_service.extract_audio(video_id)
+
+
+@router.get(
+    "/{video_id}/audio-status",
+    summary="Get audio extraction status",
+    description="Poll this endpoint to check whether audio extraction has completed.",
+)
+async def get_audio_status(video_id: str):
+    result = await audio_service.get_audio_status(video_id)
+    return JSONResponse(content={
+        **result,
+        "audio_metadata": (
+            {k: str(v) if hasattr(v, 'isoformat') else v
+             for k, v in result["audio_metadata"].items()}
+            if result.get("audio_metadata") else None
+        ),
+    })

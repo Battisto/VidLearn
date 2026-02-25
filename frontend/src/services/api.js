@@ -2,14 +2,12 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api'
 
 async function request(method, path, body = null, isFormData = false) {
     const options = { method }
-
     if (isFormData) {
-        options.body = body // FormData — let browser set Content-Type
+        options.body = body
     } else if (body) {
         options.headers = { 'Content-Type': 'application/json' }
         options.body = JSON.stringify(body)
     }
-
     const res = await fetch(`${API_BASE}${path}`, options)
     if (!res.ok) {
         const err = await res.json().catch(() => ({}))
@@ -29,8 +27,10 @@ export const api = {
 
     videos: {
         upload: (formData) => api.postForm('/videos/upload', formData),
-        list: (page = 1, pageSize = 20) => api.get(`/videos/?page=${page}&page_size=${pageSize}`),
+        list: (page = 1, size = 20) => api.get(`/videos/?page=${page}&page_size=${size}`),
         get: (id) => api.get(`/videos/${id}`),
         delete: (id) => api.delete(`/videos/${id}`),
+        extractAudio: (id) => api.post(`/videos/${id}/extract-audio`),
+        audioStatus: (id) => api.get(`/videos/${id}/audio-status`),
     },
 }

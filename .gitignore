@@ -30,11 +30,13 @@ frontend/.env
 frontend/.env.local
 
 # ──────────────────────────────────────
-# Uploads & Logs
+# Uploads, Audio & Logs
 # ──────────────────────────────────────
 uploads/
+audio/
 logs/
 *.log
+*.wav
 
 # ──────────────────────────────────────
 # OS & IDE
