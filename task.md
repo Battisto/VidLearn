@@ -159,22 +159,23 @@ Tasks
 
 Phase 4: Speech-to-Text Transcription
 
-Status: Not Started
+Status: ✅ COMPLETED
+Completed On: 2026-02-25
 Estimated Time: 4–6 days
 
 Tasks
 
- Install Whisper model
+✅ Install Whisper model (openai-whisper installed via pip)
 
- Load Whisper model
+✅ Load Whisper model (singleton pattern, pre-loaded at startup, cached in memory)
 
- Convert audio → transcript
+✅ Convert audio → transcript (POST /api/videos/{id}/transcribe with model selector)
 
- Save transcript file
+✅ Save transcript file (/transcripts/{video_id}.txt saved to disk)
 
- Handle transcription errors
+✅ Handle transcription errors (FAILED status + error_message in DB, file cleanup)
 
- Optimize transcription performance
+✅ Optimize transcription performance (thread-pool executor, fp16=False, greedy decoding)
 
 Phase 5: Text Preprocessing
 

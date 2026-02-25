@@ -12,12 +12,26 @@ from app.routes import health, videos, summaries, quizzes, translations, users
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Manage application startup and shutdown."""
-    # Startup
+    # ── Startup ───────────────────────────────────────────────────────────
     setup_logging()
     logger.info(f"🚀 Starting {settings.APP_NAME} [{settings.APP_ENV}]")
     await connect_db()
+
+    # Pre-load Whisper model in background thread so first request isn't slow
+    import asyncio
+    from concurrent.futures import ThreadPoolExecutor
+    from app.services.transcription_service import load_whisper_model
+    try:
+        executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="whisper_preload")
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(executor, load_whisper_model, settings.WHISPER_MODEL)
+        executor.shutdown(wait=False)
+    except Exception as e:
+        logger.warning(f"⚠️  Whisper pre-load skipped: {e} (will load on first use)")
+
     yield
-    # Shutdown
+
+    # ── Shutdown ──────────────────────────────────────────────────────────
     logger.info(f"🛑 Shutting down {settings.APP_NAME}")
     await disconnect_db()
 

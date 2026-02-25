@@ -30,7 +30,12 @@ export const api = {
         list: (page = 1, size = 20) => api.get(`/videos/?page=${page}&page_size=${size}`),
         get: (id) => api.get(`/videos/${id}`),
         delete: (id) => api.delete(`/videos/${id}`),
+        // Phase 3 — Audio
         extractAudio: (id) => api.post(`/videos/${id}/extract-audio`),
         audioStatus: (id) => api.get(`/videos/${id}/audio-status`),
+        // Phase 4 — Transcription
+        transcribe: (id, model) => api.post(`/videos/${id}/transcribe${model ? `?model=${model}` : ''}`),
+        getTranscript: (id) => api.get(`/videos/${id}/transcript`),
+        transcriptionStatus: (id) => api.get(`/videos/${id}/transcription-status`),
     },
 }

@@ -1,7 +1,3 @@
-/**
- * Shared utility helpers for the frontend.
- */
-
 export function formatFileSize(bytes) {
     if (bytes === 0) return '0 B'
     const k = 1024
@@ -19,10 +15,12 @@ export function formatDate(dateStr) {
 
 export const STATUS_CONFIG = {
     uploaded: { label: 'Uploaded', color: '#6c63ff', bg: 'rgba(108,99,255,0.15)' },
-    processing: { label: 'Processing', color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' },
+    extracting_audio: { label: 'Extracting Audio', color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' },
+    audio_ready: { label: 'Audio Ready', color: '#22c55e', bg: 'rgba(34,197,94,0.15)' },
     transcribing: { label: 'Transcribing', color: '#3b82f6', bg: 'rgba(59,130,246,0.15)' },
-    summarizing: { label: 'Summarizing', color: '#a855f7', bg: 'rgba(168,85,247,0.15)' },
-    completed: { label: 'Completed', color: '#22c55e', bg: 'rgba(34,197,94,0.15)' },
+    transcript_ready: { label: 'Transcript Ready', color: '#a855f7', bg: 'rgba(168,85,247,0.15)' },
+    summarizing: { label: 'Summarizing', color: '#ec4899', bg: 'rgba(236,72,153,0.15)' },
+    completed: { label: 'Completed', color: '#10b981', bg: 'rgba(16,185,129,0.15)' },
     failed: { label: 'Failed', color: '#ef4444', bg: 'rgba(239,68,68,0.15)' },
 }
 
