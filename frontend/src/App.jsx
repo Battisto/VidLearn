@@ -6,6 +6,7 @@ import UploadPage from './pages/UploadPage'
 import VideosPage from './pages/VideosPage'
 import TranscriptPage from './pages/TranscriptPage'
 import PreprocessingPage from './pages/PreprocessingPage'
+import SummaryPage from './pages/SummaryPage'
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/videos" element={<VideosPage />} />
           <Route path="/videos/:id/transcript" element={<TranscriptPage />} />
           <Route path="/videos/:id/preprocessing" element={<PreprocessingPage />} />
+          <Route path="/videos/:id/summary" element={<SummaryPage />} />
         </Routes>
       </div>
     </BrowserRouter>

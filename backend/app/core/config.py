@@ -27,11 +27,17 @@ class Settings(BaseSettings):
     MAX_FILE_SIZE_MB: int = 500
     ALLOWED_VIDEO_FORMATS: str = "mp4,avi,mov,mkv,webm"
 
-    # AI APIs
-    GOOGLE_GEMINI_API_KEY: str = ""
-
-    # Whisper
+    # Whisper (Phase 4)
     WHISPER_MODEL: str = "base"
+
+    # Summarization (Phase 6)
+    SUMMARIZER_PROVIDER: str = "gemini"      # "gemini" | "bart" | "both"
+    GOOGLE_GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-1.5-flash"  # fast + free tier
+    BART_MODEL: str = "facebook/bart-large-cnn"
+    SUMMARY_MIN_LENGTH: int = 80
+    SUMMARY_MAX_LENGTH: int = 500
+    SUMMARY_MAX_TOKENS: int = 150           # per BART chunk summary
 
     # CORS
     FRONTEND_URL: str = "http://localhost:5173"
@@ -43,6 +49,10 @@ class Settings(BaseSettings):
     @property
     def max_file_size_bytes(self) -> int:
         return self.MAX_FILE_SIZE_MB * 1024 * 1024
+
+    @property
+    def gemini_enabled(self) -> bool:
+        return bool(self.GOOGLE_GEMINI_API_KEY and self.GOOGLE_GEMINI_API_KEY != "your-gemini-api-key-here")
 
     class Config:
         env_file = ".env"

@@ -30,16 +30,20 @@ export const api = {
         list: (p = 1, s = 20) => api.get(`/videos/?page=${p}&page_size=${s}`),
         get: (id) => api.get(`/videos/${id}`),
         delete: (id) => api.delete(`/videos/${id}`),
-        // Phase 3 — Audio
+        // Phase 3
         extractAudio: (id) => api.post(`/videos/${id}/extract-audio`),
         audioStatus: (id) => api.get(`/videos/${id}/audio-status`),
-        // Phase 4 — Transcription
+        // Phase 4
         transcribe: (id, model) => api.post(`/videos/${id}/transcribe${model ? `?model=${model}` : ''}`),
         getTranscript: (id) => api.get(`/videos/${id}/transcript`),
         transcriptionStatus: (id) => api.get(`/videos/${id}/transcription-status`),
-        // Phase 5 — Preprocessing
+        // Phase 5
         preprocess: (id) => api.post(`/videos/${id}/preprocess`),
         getPreprocessing: (id) => api.get(`/videos/${id}/preprocessing`),
         preprocessingStatus: (id) => api.get(`/videos/${id}/preprocessing-status`),
+        // Phase 6
+        summarize: (id, prov) => api.post(`/videos/${id}/summarize${prov ? `?provider=${prov}` : ''}`),
+        getSummary: (id) => api.get(`/videos/${id}/summary`),
+        summarizationStatus: (id) => api.get(`/videos/${id}/summarization-status`),
     },
 }

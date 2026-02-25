@@ -22,8 +22,11 @@ openai-whisper
 regex
 nltk
 
-# Phase 6 — Summarization (install separately — large download)
-# transformers
+# Phase 6 — AI Summarization
+google-generativeai
+
+# Phase 6 (optional, local BART) — large download ~1.6 GB, install manually:
+# transformers==4.40.0
 # torch
 
 # Phase 7 — Quiz Generation

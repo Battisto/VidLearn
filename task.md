@@ -197,22 +197,23 @@ Tasks
 
 Phase 6: AI Summarization Module
 
-Status: Not Started
+Status: ✅ COMPLETED
+Completed On: 2026-02-25
 Estimated Time: 5–7 days
 
 Tasks
 
- Install BART summarization model
+✅ Install BART summarization model (optional local fallback, facebook/bart-large-cnn)
 
- Load summarization pipeline
+✅ Load summarization pipeline (BART singleton + Gemini API client, auto-detect by API key)
 
- Summarize text chunks
+✅ Summarize text chunks (per-chunk summarization with Gemini 1.5 Flash or BART)
 
- Merge chunk summaries
+✅ Merge chunk summaries (≤3 chunks: smart concatenation; >3 chunks: second-pass AI merge)
 
- Store final summary
+✅ Store final summary (summary + chunk_summaries + SummaryMetadata in MongoDB + disk)
 
- Optimize summary quality
+✅ Optimize summary quality (dual-provider, merge prompt engineering, compression ratio tracking)
 
 Phase 7: Quiz Generation Module
 

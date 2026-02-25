@@ -22,6 +22,7 @@ export const STATUS_CONFIG = {
     preprocessing: { label: 'Preprocessing', color: '#f97316', bg: 'rgba(249,115,22,0.15)' },
     preprocessed: { label: 'Preprocessed', color: '#06b6d4', bg: 'rgba(6,182,212,0.15)' },
     summarizing: { label: 'Summarizing', color: '#ec4899', bg: 'rgba(236,72,153,0.15)' },
+    summarized: { label: 'Summarized', color: '#f43f5e', bg: 'rgba(244,63,94,0.15)' },
     completed: { label: 'Completed', color: '#10b981', bg: 'rgba(16,185,129,0.15)' },
     failed: { label: 'Failed', color: '#ef4444', bg: 'rgba(239,68,68,0.15)' },
 }
