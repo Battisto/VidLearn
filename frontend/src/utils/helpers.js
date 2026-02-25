@@ -19,6 +19,8 @@ export const STATUS_CONFIG = {
     audio_ready: { label: 'Audio Ready', color: '#22c55e', bg: 'rgba(34,197,94,0.15)' },
     transcribing: { label: 'Transcribing', color: '#3b82f6', bg: 'rgba(59,130,246,0.15)' },
     transcript_ready: { label: 'Transcript Ready', color: '#a855f7', bg: 'rgba(168,85,247,0.15)' },
+    preprocessing: { label: 'Preprocessing', color: '#f97316', bg: 'rgba(249,115,22,0.15)' },
+    preprocessed: { label: 'Preprocessed', color: '#06b6d4', bg: 'rgba(6,182,212,0.15)' },
     summarizing: { label: 'Summarizing', color: '#ec4899', bg: 'rgba(236,72,153,0.15)' },
     completed: { label: 'Completed', color: '#10b981', bg: 'rgba(16,185,129,0.15)' },
     failed: { label: 'Failed', color: '#ef4444', bg: 'rgba(239,68,68,0.15)' },

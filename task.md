@@ -179,20 +179,21 @@ Tasks
 
 Phase 5: Text Preprocessing
 
-Status: Not Started
+Status: ✅ COMPLETED
+Completed On: 2026-02-25
 Estimated Time: 3–5 days
 
 Tasks
 
- Clean transcript text
+✅ Clean transcript text (unicode NFC normalization, control char removal)
 
- Remove noise
+✅ Remove noise (Whisper artifacts, filler words, timestamps, hallucinated tags, repetitions)
 
- Normalize text
+✅ Normalize text (punctuation normalization, curly quotes, em-dashes, trailing spaces)
 
- Split transcript into chunks
+✅ Split transcript into chunks (overlapping 800-token chunks, 100-token overlap, sentence-boundary aware)
 
- Prepare text for summarization
+✅ Prepare text for summarization (BART-ready chunks stored in MongoDB + disk as {id}_clean.txt)
 
 Phase 6: AI Summarization Module
 

@@ -26,8 +26,8 @@ export const api = {
     health: () => api.get('/health'),
 
     videos: {
-        upload: (formData) => api.postForm('/videos/upload', formData),
-        list: (page = 1, size = 20) => api.get(`/videos/?page=${page}&page_size=${size}`),
+        upload: (fd) => api.postForm('/videos/upload', fd),
+        list: (p = 1, s = 20) => api.get(`/videos/?page=${p}&page_size=${s}`),
         get: (id) => api.get(`/videos/${id}`),
         delete: (id) => api.delete(`/videos/${id}`),
         // Phase 3 — Audio
@@ -37,5 +37,9 @@ export const api = {
         transcribe: (id, model) => api.post(`/videos/${id}/transcribe${model ? `?model=${model}` : ''}`),
         getTranscript: (id) => api.get(`/videos/${id}/transcript`),
         transcriptionStatus: (id) => api.get(`/videos/${id}/transcription-status`),
+        // Phase 5 — Preprocessing
+        preprocess: (id) => api.post(`/videos/${id}/preprocess`),
+        getPreprocessing: (id) => api.get(`/videos/${id}/preprocessing`),
+        preprocessingStatus: (id) => api.get(`/videos/${id}/preprocessing-status`),
     },
 }

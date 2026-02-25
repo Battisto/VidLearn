@@ -18,6 +18,10 @@ ffmpeg-python==0.2.0
 # Phase 4 — Speech-to-Text
 openai-whisper
 
+# Phase 5 — Text Preprocessing
+regex
+nltk
+
 # Phase 6 — Summarization (install separately — large download)
 # transformers
 # torch
