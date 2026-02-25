@@ -1,15 +1,14 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api'
 
-/**
- * Generic API request helper.
- * Throws an error with the server message if the response is not OK.
- */
-async function request(method, path, body = null) {
-    const options = {
-        method,
-        headers: { 'Content-Type': 'application/json' },
+async function request(method, path, body = null, isFormData = false) {
+    const options = { method }
+
+    if (isFormData) {
+        options.body = body // FormData — let browser set Content-Type
+    } else if (body) {
+        options.headers = { 'Content-Type': 'application/json' }
+        options.body = JSON.stringify(body)
     }
-    if (body) options.body = JSON.stringify(body)
 
     const res = await fetch(`${API_BASE}${path}`, options)
     if (!res.ok) {
@@ -22,9 +21,16 @@ async function request(method, path, body = null) {
 export const api = {
     get: (path) => request('GET', path),
     post: (path, body) => request('POST', path, body),
+    postForm: (path, formData) => request('POST', path, formData, true),
     put: (path, body) => request('PUT', path, body),
     delete: (path) => request('DELETE', path),
 
-    // Health
     health: () => api.get('/health'),
+
+    videos: {
+        upload: (formData) => api.postForm('/videos/upload', formData),
+        list: (page = 1, pageSize = 20) => api.get(`/videos/?page=${page}&page_size=${pageSize}`),
+        get: (id) => api.get(`/videos/${id}`),
+        delete: (id) => api.delete(`/videos/${id}`),
+    },
 }

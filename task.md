@@ -117,24 +117,25 @@ Tasks
 
 Phase 2: Video Upload Module
 
-Status: Not Started
+Status: ✅ COMPLETED
+Completed On: 2026-02-25
 Estimated Time: 4–6 days
 
 Tasks
 
- Create video upload API endpoint
+✅ Create video upload API endpoint (POST /api/videos/upload)
 
- Implement file validation
+✅ Implement file validation (MIME type, extension, size — client + server)
 
- Save videos to storage
+✅ Save videos to storage (chunked streaming save to /uploads/)
 
- Create frontend upload interface
+✅ Create frontend upload interface (UploadPage.jsx with form)
 
- Add drag-and-drop upload support
+✅ Add drag-and-drop upload support (native HTML5 DnD)
 
- Show upload progress
+✅ Show upload progress (XHR progress events + animated ProgressBar)
 
- Handle upload errors
+✅ Handle upload errors (client validation, server errors, network errors)
 
 Phase 3: Audio Extraction Module
 
