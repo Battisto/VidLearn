@@ -22,6 +22,7 @@ from concurrent.futures import ThreadPoolExecutor
 from bson import ObjectId
 from loguru import logger
 
+from app.core.config import settings
 from app.core.database import get_db
 from app.models.video import VideoStatus, AudioMetadata, VideoResponse, VideoMetadata
 
@@ -29,7 +30,7 @@ COLLECTION = "videos"
 AUDIO_DIR_NAME = "audio"
 
 # Single-thread pool so heavy FFmpeg jobs don't starve the async loop
-_executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="ffmpeg")
+_executor = ThreadPoolExecutor(max_workers=4, thread_name_prefix="ffmpeg")
 
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -83,6 +84,7 @@ def _run_ffmpeg(video_path: str, audio_path: str) -> None:
     Output spec: WAV, mono, 16 kHz (Whisper-optimised).
     Flags:
       -hwaccel auto      → use GPU decoding where available
+      -threads 0         → use all CPU cores for decoding (critical for large files)
       -vn                → skip video stream
       -ac 1              → mono
       -ar 16000          → 16 kHz sample rate
@@ -90,20 +92,27 @@ def _run_ffmpeg(video_path: str, audio_path: str) -> None:
     """
     cmd = [
         "ffmpeg",
-        "-hwaccel", "auto",
-        "-i", video_path,
-        "-vn",               # no video
-        "-ac", "1",          # mono
-        "-ar", "16000",      # 16 kHz — Whisper optimal
-        "-acodec", "pcm_s16le",  # 16-bit PCM WAV
-        "-y",                # overwrite
+        "-probesize",    "50M",         # limit probe scan (faster header parse)
+        "-analyzeduration", "5000000", # limit analysis (0.5s) — sufficient for AAC/MP3
+        "-hwaccel",      "auto",        # GPU decode where available
+        "-threads",      "0",           # all cores for decoding
+        "-i",            video_path,
+        "-map",          "0:a:0",        # take only the first audio track — skip video decode scan
+        "-vn",                          # no video output
+        "-ac",           "1",           # mono
+        "-ar",           "16000",       # 16 kHz — Whisper optimal
+        "-acodec",       "pcm_s16le",   # 16-bit PCM WAV
+        "-compression_level", "0",      # fastest write
+        "-loglevel",     "error",       # suppress verbose FFmpeg output
+        "-y",                           # overwrite
         audio_path,
     ]
     logger.debug(f"FFmpeg cmd: {' '.join(cmd)}")
 
     result = subprocess.run(
         cmd,
-        capture_output=True, text=True, timeout=600,  # 10-min max
+        capture_output=True, text=True,
+        timeout=settings.FFMPEG_TIMEOUT_SEC,
     )
 
     if result.returncode != 0:

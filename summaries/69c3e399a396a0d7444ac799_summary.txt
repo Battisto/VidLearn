@@ -1,0 +1,1 @@
+In Interrupt Re1 IO, I have told you there are some issues related data transfer from disk to main memory. Here, I will explain you how exactly we can transfer data from disks to memory without involvement of CPU. I will also explain how timings are there like preparation time and transfer time. Based on this parameters, you can be able to solve any problem related DMA.

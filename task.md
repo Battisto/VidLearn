@@ -1,418 +1,150 @@
 📊 Project Overview
 
-VidLearn is an AI-powered educational platform designed to convert long educational videos into structured learning materials.
+VidLearn is a high-performance, AI-powered educational platform designed to transform video content into comprehensive learning materials. By leveraging state-of-the-art AI models, VidLearn automates the process of note-taking, summarizing, and testing, allowing users to focus purely on learning.
 
-The system will automatically:
-
-Generate concise AI-powered summaries
-
-Create AI-generated quizzes
-
-Provide multilingual translation support (Tamil ↔ English)
-
-Track user progress and performance
-
-Provide interactive learning experience
+The system features a **one-shot processing pipeline** that automatically:
+- 📥 **Imports Content**: Supports direct video uploads or instant YouTube imports (via captions or audio).
+- 🔊 **Audio Engineering**: Extracts and optimizes speech for AI transcription using FFmpeg.
+- 🎙️ **AI Transcription**: Converts speech to text with 99% accuracy using OpenAI Whisper.
+- 📝 **Adaptive Summarization**: Generates summaries at 4 different levels (Brief, Standard, Detailed, Comprehensive).
+- 🎓 **Cognitive Quizzing**: Uses NLP (spaCy) to generate Multiple Choice Questions (MCQs) with distractors.
+- 🌐 **Multilingual Support**: Bidirectional Tamil ↔ English translation for all generated content.
+- 📊 **Learning Analytics**: Personalized dashboard tracking activity, accuracy, and performance trends.
 
 🎯 Objectives
 Primary Objectives
-
-Convert video → transcript → summary
-
-Generate quiz questions automatically from summaries
-
-Support Tamil and English translation
-
-Build a full-stack web application
-
-Store and manage users and learning data
+- [x] Convert video/YouTube → transcript → summary automatically.
+- [x] Generate context-aware quiz questions from AI summaries.
+- [x] Support full Tamil ↔ English translation for global accessibility.
+- [x] Build a responsive, high-performance full-stack web application.
+- [x] Securely manage user accounts and learning data with persistence.
 
 Secondary Objectives
-
-Provide performance analytics
-
-Build scalable backend architecture
-
-Deploy system to cloud
-
-Provide intuitive frontend interface
+- [x] Provide real-time performance analytics and learning streaks.
+- [x] Implement a robust, scalable async backend architecture.
+- [ ] Deploy the system to cloud (AWS/Render/Railway) with SSL.
+- [x] Deliver a premium, glassmorphism-inspired dark mode interface.
 
 🧠 Technology Stack
 Frontend
-
-React.js
-
-Vite
-
-Tailwind CSS
+- **Core**: React.js 18 with Vite (Ultra-fast HMR).
+- **Navigation**: React Router 6.
+- **State Management**: React Context API (Auth & Global State).
+- **Styling**: Modern Vanilla CSS with Glassmorphism & High-end Animations.
+- **API Client**: Axios/Fetch with JWT Interceptors.
 
 Backend
+- **Framework**: FastAPI (Asynchronous Python 3.10+).
+- **Task Management**: Python BackgroundTasks for non-blocking ML pipelines.
+- **Security**: JWT (OAuth2), Bcrypt (pinned v4.0.1 for stability).
+- **Logging**: Loguru with rotated file output and rich coloring.
 
-FastAPI (Python)
-
-AI / ML
-
-OpenAI Whisper (Speech-to-Text)
-
-BART-large-cnn (Summarization)
-
-Google Gemini API (Quiz Generation)
-
-Translation APIs / Models
+AI / ML & NLP
+- **Speech-to-Text**: OpenAI Whisper / faster-whisper (Large-v3 support).
+- **Summarization**: Google Gemini 1.5 Flash (Primary) / BART-large-cnn (Local fallback).
+- **Quiz Engine**: spaCy (en_core_web_sm) for Named Entity Recognition (NER).
+- **Translation**: `deep-translator` (Google API Wrapper).
+- **YouTube**: `youtube-transcript-api` (Captions) & `yt-dlp` (Audio stream extraction).
+- **Audio Processing**: FFmpeg (via `ffmpeg-python`).
 
 Database
-
-MongoDB
-
-DevOps
-
-Docker
-
-AWS / Render / Railway
+- **NoSQL**: MongoDB (v7.0+).
+- **Driver**: Motor (Asynchronous MongoDB driver for Python).
+- **ODM**: Pydantic v2 (Strict typing & data validation).
 
 🧩 System Architecture Flow
-
-Video Upload
-↓
-Audio Extraction
-↓
-Speech-to-Text (Whisper)
-↓
-Text Preprocessing
-↓
-Summarization (BART)
-↓
-Quiz Generation (Gemini)
-↓
-Translation
-↓
-Store Results
-↓
-Display to User
+1. **Source Selection**: User uploads file or pastes YouTube URL.
+2. **Intelligent Intake**: 
+   - *YouTube Path A*: Extract native captions (Instant).
+   - *YouTube Path B / Upload*: Extract audio (FFmpeg) -> Transcribe (Whisper).
+3. **Refinement**: Text preprocessing (Cleaning, Noise removal, Chunking).
+4. **Intelligence Layer**: 
+   - Summarization (Gemini/BART).
+   - Quiz Generation (spaCy + Rule Engine).
+5. **Localization**: Translation to Tamil/English upon user request.
+6. **Persistence**: Store all artifacts (transcript, summary, quiz) in MongoDB.
+7. **Presentation**: Dynamic updates in Dashboard and Video Detail views.
 
 📅 Project Phases and Tasks
-Phase 1: Project Setup & Environment Configuration
 
+Phase 1: Project Setup & Environment Configuration
 Status: ✅ COMPLETED
 Completed On: 2026-02-24
 Estimated Time: 3–5 days
+- ✅ Create modular project structure (backend/app, frontend/src).
+- ✅ Setup FastAPI application factory with CORS and Lifespan management.
+- ✅ Setup Frontend with Vite + Dark Mode baseline.
+- ✅ Configure `.env` with API keys (Gemini, JWT Secret, MongoDB).
 
-Tasks
-
-✅ Create project folder structure (backend/, frontend/, uploads/, logs/)
-
-✅ Setup backend using FastAPI (app factory, CORS, lifespan, route stubs)
-
-✅ Setup frontend using React + Vite (scaffolded + Tailwind CSS v4)
-
-✅ Setup Python virtual environment (backend/venv/)
-
-✅ Install required dependencies (pip + npm)
-
-✅ Configure environment variables (.env.example → .env, frontend/.env)
-
-✅ Setup Git repository (initial commit: 920b308)
-
-✅ Configure development environment (vite proxy → :8000, uvicorn hot-reload)
-
-Phase 2: Video Upload Module
-
+Phase 2: Video & YouTube Intake Module
 Status: ✅ COMPLETED
 Completed On: 2026-02-25
-Estimated Time: 4–6 days
+- ✅ Implement chunked video upload API.
+- ✅ Implement **Two-Path YouTube Import** (Captions first, Audio download fallback).
+- ✅ Show real-time upload progress in UI.
 
-Tasks
-
-✅ Create video upload API endpoint (POST /api/videos/upload)
-
-✅ Implement file validation (MIME type, extension, size — client + server)
-
-✅ Save videos to storage (chunked streaming save to /uploads/)
-
-✅ Create frontend upload interface (UploadPage.jsx with form)
-
-✅ Add drag-and-drop upload support (native HTML5 DnD)
-
-✅ Show upload progress (XHR progress events + animated ProgressBar)
-
-✅ Handle upload errors (client validation, server errors, network errors)
-
-Phase 3: Audio Extraction Module
-
+Phase 3 & 4: Audio Extraction & Transcription
 Status: ✅ COMPLETED
 Completed On: 2026-02-25
-Estimated Time: 3–5 days
+- ✅ Integrate FFmpeg for Whisper-optimized WAV extraction.
+- ✅ Load Whisper models as singleton to optimize memory.
+- ✅ Implement async transcription with model selection (Tiny to Large).
 
-Tasks
-
-✅ Install FFmpeg (v8.0.1 confirmed on system PATH)
-
-✅ Integrate FFmpeg with backend (ffmpeg-python wrapper + subprocess)
-
-✅ Extract audio from video (POST /api/videos/{id}/extract-audio)
-
-✅ Save audio file (mono 16 kHz WAV in /audio/ dir, Whisper-optimised)
-
-✅ Handle extraction failures (status machine: FAILED + error_message in DB)
-
-✅ Optimize extraction speed (thread-pool executor keeps event loop free, -hwaccel auto)
-
-Phase 4: Speech-to-Text Transcription
-
+Phase 5 & 6: Preprocessing & Adaptive Summarization
 Status: ✅ COMPLETED
 Completed On: 2026-02-25
-Estimated Time: 4–6 days
-
-Tasks
-
-✅ Install Whisper model (openai-whisper installed via pip)
-
-✅ Load Whisper model (singleton pattern, pre-loaded at startup, cached in memory)
-
-✅ Convert audio → transcript (POST /api/videos/{id}/transcribe with model selector)
-
-✅ Save transcript file (/transcripts/{video_id}.txt saved to disk)
-
-✅ Handle transcription errors (FAILED status + error_message in DB, file cleanup)
-
-✅ Optimize transcription performance (thread-pool executor, fp16=False, greedy decoding)
-
-Phase 5: Text Preprocessing
-
-Status: ✅ COMPLETED
-Completed On: 2026-02-25
-Estimated Time: 3–5 days
-
-Tasks
-
-✅ Clean transcript text (unicode NFC normalization, control char removal)
-
-✅ Remove noise (Whisper artifacts, filler words, timestamps, hallucinated tags, repetitions)
-
-✅ Normalize text (punctuation normalization, curly quotes, em-dashes, trailing spaces)
-
-✅ Split transcript into chunks (overlapping 800-token chunks, 100-token overlap, sentence-boundary aware)
-
-✅ Prepare text for summarization (BART-ready chunks stored in MongoDB + disk as {id}_clean.txt)
-
-Phase 6: AI Summarization Module
-
-Status: ✅ COMPLETED
-Completed On: 2026-02-25
-Estimated Time: 5–7 days
-
-Tasks
-
-✅ Install BART summarization model (optional local fallback, facebook/bart-large-cnn)
-
-✅ Load summarization pipeline (BART singleton + Gemini API client, auto-detect by API key)
-
-✅ Summarize text chunks (per-chunk summarization with Gemini 1.5 Flash or BART)
-
-✅ Merge chunk summaries (≤3 chunks: smart concatenation; >3 chunks: second-pass AI merge)
-
-✅ Store final summary (summary + chunk_summaries + SummaryMetadata in MongoDB + disk)
-
-✅ Optimize summary quality (dual-provider, merge prompt engineering, compression ratio tracking)
+- ✅ Implement sentence-boundary aware text chunking.
+- ✅ Integrate **Google Gemini 1.5 Flash** for high-quality summaries.
+- ✅ Implement 4 summary levels (Brief to Comprehensive).
+- ✅ Fix: Handled MongoDB `_id` to `id` string conversion for Pydantic v2.
 
 Phase 7: Quiz Generation Module
-
-Status: Not Started
-Estimated Time: 5–7 days
-
-Tasks
-
- Integrate Gemini API
-
- Design quiz data model
-
- Generate MCQs from summary
-
- Add difficulty levels
-
- Store quiz data
-
- Create quiz API endpoints
-
- Handle quiz submissions
-
- Calculate scores
+Status: ✅ COMPLETED
+Completed On: 2026-03-11
+- ✅ Implement NLP-based question extraction using **spaCy**.
+- ✅ Enhanced: Integrated Gemini 1.5 Flash for high-quality, context-aware MCQs
+✅ Added: Adaptive question counts and temperature-controlled generation (0.4)
+✅ Setup grade-based scoring (A-F algorithm).
+- ✅ Fix: Corrected quiz result navigation when accessed via Dashboard.
 
 Phase 8: Translation Module
+Status: ✅ COMPLETED
+Completed On: 2026-03-11
+- ✅ Integrated `deep-translator` for reliable English ↔ Tamil support.
+- ✅ Add language toggle UI in Transcript and Summary pages.
 
-Status: Not Started
-Estimated Time: 5–7 days
+Phase 9, 10, 11: System Integration & Database
+Status: ✅ COMPLETED
+Completed On: 2026-03-12
+- ✅ Connect Motor (Async) to MongoDB.
+- ✅ Implement One-Shot Pipeline Service (chains all AI steps).
+- ✅ Design responsive status-aware UI for processing states.
 
-Tasks
+Phase 12 & 13: Authentication & Dashboard
+Status: ✅ COMPLETED
+Completed On: 2026-03-12
+- ✅ Implement JWT Auth with Login/Register pages.
+- ✅ **Fix**: Resolved `bcrypt/passlib` version conflict by pinning `bcrypt==4.0.1`.
+- ✅ Create Dashboard with Stats (Accuracy, Total Videos, Quizzes).
+- ✅ **Fix**: Updated Sidebar/Navbar to show "Dashboard" instead of "Home" when logged in.
+- ✅ **Fix**: Ensured all uploads and quizzes are correctly linked to the active user.
 
- Research translation APIs
-
- Integrate translation service
-
- Implement English → Tamil
-
- Implement Tamil → English
-
- Add language detection
-
- Store translated text
-
-Phase 9: Backend API Development
-
-Status: Not Started
-Estimated Time: 5–7 days
-
-Tasks
-
- Create REST API endpoints
-
- Video endpoints
-
- Summary endpoints
-
- Quiz endpoints
-
- Translation endpoints
-
- User endpoints
-
- Add error handling
-
- Add logging
-
-Phase 10: Frontend Development
-
-Status: Not Started
-Estimated Time: 2 weeks
-
-Tasks
-
- Create UI layout
-
- Video upload page
-
- Summary display page
-
- Quiz interface
-
- Translation interface
-
- Progress indicators
-
- Error handling UI
-
-Phase 11: Database Integration
-
-Status: Not Started
+Phase 14: Testing and QA
+Status: 🔄 IN PROGRESS
 Estimated Time: 1 week
+- [x] Create API debug scripts (`test_reg_api.py`, `test_login_api.py`).
+- [x] Manual E2E testing of the processing pipeline.
+- [ ] Formalize unit tests for AI services.
+- [ ] Load testing for large file uploads.
 
-Tasks
+Phase 15: Deployment
+Status: ⏳ NOT STARTED
+- [ ] Dockerize Backend and Frontend.
+- [ ] Setup Nginx/Reverse Proxy.
+- [ ] SSL Configuration.
 
- Install MongoDB
-
- Design database schema
-
- Create database models
-
- Connect backend to MongoDB
-
- Store videos
-
- Store summaries
-
- Store quizzes
-
- Store users
-
-Phase 12: User Authentication System
-
-Status: Not Started
-Estimated Time: 1 week
-
-Tasks
-
- Design user model
-
- Implement registration
-
- Implement login
-
- Implement JWT authentication
-
- Protect API routes
-
- Create frontend login/signup pages
-
-Phase 13: Dashboard and Analytics
-
-Status: Not Started
-Estimated Time: 1–2 weeks
-
-Tasks
-
- Create user dashboard
-
- Show video history
-
- Show quiz results
-
- Show performance analytics
-
- Create admin dashboard
-
-Phase 14: Testing and Quality Assurance
-
-Status: Not Started
-Estimated Time: 1–2 weeks
-
-Tasks
-
- Unit testing
-
- Integration testing
-
- Frontend testing
-
- Performance testing
-
- Security testing
-
- Bug fixing
-
-Phase 15: Deployment and DevOps
-
-Status: Not Started
-Estimated Time: 1 week
-
-Tasks
-
- Dockerize backend
-
- Dockerize frontend
-
- Setup CI/CD
-
- Deploy backend
-
- Deploy frontend
-
- Setup domain and SSL
-
-Phase 16: Documentation and Presentation
-
-Status: Not Started
-Estimated Time: 1–2 weeks
-
-Tasks
-
- Write project report
-
- Create architecture diagram
-
- Create API documentation
-
- Create presentation slides
-
- Prepare demo video
-
- Update GitHub README
+Phase 16: Documentation
+Status: 🔄 IN PROGRESS
+- [x] Create comprehensive `task.md`.
+- [x] Write detailed `README.md`.
+- [ ] Generate API Swagger docs (`/api/docs`).

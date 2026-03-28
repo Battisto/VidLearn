@@ -32,6 +32,7 @@ async def upload_video(
     file: UploadFile,
     title: str,
     description: str | None = None,
+    user_id: str | None = None,
 ) -> VideoResponse:
     """
     1. Validate the file type and size.
@@ -75,13 +76,14 @@ async def upload_video(
         "title": title,
         "description": description,
         "status": VideoStatus.UPLOADED,
+        "storage_path": abs_path,
         "metadata": {
             "original_filename": file.filename,
             "file_size_bytes": file_size,
             "file_extension": ext,
             "content_type": file.content_type or f"video/{ext}",
         },
-        "storage_path": abs_path,
+        "user_id": user_id,
         "transcript": None,
         "summary": None,
         "created_at": datetime.utcnow(),
@@ -91,16 +93,70 @@ async def upload_video(
     db = get_db()
     result = await db[COLLECTION].insert_one(doc)
     doc["_id"] = result.inserted_id
+    video_id = str(result.inserted_id)
+
+    # ── Auto-trigger full pipeline in background ──────────────────────────
+    # The caller gets the VideoResponse immediately (UPLOADED state).
+    # The pipeline runs async: extract audio → transcribe → preprocess → summarize.
+    import asyncio
+    from app.services.pipeline_service import _run_pipeline
+    asyncio.create_task(_run_pipeline(video_id, whisper_model=None, provider=None))
+    logger.info(f"🚀 Auto-pipeline queued for video_id={video_id}")
 
     return _doc_to_response(doc)
 
 
-async def get_all_videos(page: int = 1, page_size: int = 20) -> dict:
-    """Retrieve paginated list of all videos."""
+async def upload_text(
+    title: str,
+    text: str,
+    description: str | None = None,
+    user_id: str | None = None,
+) -> VideoResponse:
+    doc = {
+        "title": title,
+        "description": description,
+        "status": VideoStatus.TRANSCRIPT_READY,
+        "storage_path": "text_upload",
+        "metadata": {
+            "original_filename": "pasted_text.txt",
+            "file_size_bytes": len(text.encode('utf-8')),
+            "file_extension": "txt",
+            "content_type": "text/plain",
+        },
+        "user_id": user_id,
+        "transcript": text,
+        "transcript_metadata": {
+            "whisper_model": "none (pasted)",
+            "word_count": len(text.split()),
+            "char_count": len(text),
+            "transcribed_at": datetime.utcnow()
+        },
+        "summary": None,
+        "created_at": datetime.utcnow(),
+        "updated_at": datetime.utcnow(),
+    }
+
+    db = get_db()
+    result = await db[COLLECTION].insert_one(doc)
+    doc["_id"] = result.inserted_id
+    video_id = str(result.inserted_id)
+
+    # Auto-trigger preprocessing
+    import asyncio
+    from app.services.preprocessing_service import preprocess_transcript
+    asyncio.create_task(preprocess_transcript(video_id))
+    logger.info(f"🚀 Preprocessing queued for text upload id={video_id}")
+
+    return _doc_to_response(doc)
+
+
+async def list_videos(page: int = 1, page_size: int = 20, user_id: str | None = None) -> dict:
+    """Retrieve paginated list of videos, filtered by user if user_id is provided."""
     db = get_db()
     skip = (page - 1) * page_size
-    total = await db[COLLECTION].count_documents({})
-    cursor = db[COLLECTION].find({}).sort("created_at", -1).skip(skip).limit(page_size)
+    query = {"user_id": user_id} if user_id else {}
+    total = await db[COLLECTION].count_documents(query)
+    cursor = db[COLLECTION].find(query).sort("created_at", -1).skip(skip).limit(page_size)
     docs = await cursor.to_list(length=page_size)
     return {
         "videos": [_doc_to_response(d) for d in docs],

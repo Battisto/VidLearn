@@ -24,6 +24,7 @@ from pathlib import Path
 from bson import ObjectId
 from loguru import logger
 
+from app.core.config import settings
 from app.core.database import get_db
 from app.models.video import (
     VideoStatus, PreprocessingMetadata, TextChunk,
@@ -33,10 +34,11 @@ from app.models.video import (
 from app.utils.text_processor import full_clean, chunk_text, estimate_tokens
 
 COLLECTION   = "videos"
-CHUNK_TOKENS = 800
-OVERLAP      = 100
+# Chunk sizes are read from config so they can be tuned without code changes
+CHUNK_TOKENS = settings.CHUNK_TOKENS   # default 1200 (was 800)
+OVERLAP      = settings.CHUNK_OVERLAP  # default 150  (was 100)
 
-_executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="preproc")
+_executor = ThreadPoolExecutor(max_workers=4, thread_name_prefix="preproc")
 
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────

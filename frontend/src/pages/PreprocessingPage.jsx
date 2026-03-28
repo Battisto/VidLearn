@@ -127,7 +127,7 @@ export default function PreprocessingPage() {
                 <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
                     {[['cleaned', '✨ Cleaned Text'], ['chunks', `🧩 Chunks (${chunks.length})`]].map(([tab, label]) => (
                         <button key={tab} onClick={() => setActiveTab(tab)} style={{
-                            padding: '8px 18px', borderRadius: 8, cursor: 'pointer', border: 'none',
+                            padding: '8px 18px', borderRadius: 8, cursor: 'pointer',
                             background: activeTab === tab ? 'rgba(6,182,212,0.2)' : 'rgba(255,255,255,0.05)',
                             border: `1px solid ${activeTab === tab ? 'rgba(6,182,212,0.4)' : 'rgba(255,255,255,0.1)'}`,
                             color: activeTab === tab ? '#22d3ee' : '#94a3b8',

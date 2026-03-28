@@ -245,7 +245,7 @@ function ErrBox({ msg }) {
 }
 function Btn({ children, onClick, disabled, color = 'purple' }) {
     const c = CM[color] || CM.purple
-    return <button onClick={onClick} disabled={disabled} style={{ flex: 1, minWidth: 0, padding: '7px 4px', borderRadius: 8, border: `1px solid ${c.bor}`, cursor: disabled ? 'not-allowed' : 'pointer', background: c.bg, color: c.txt, fontSize: '0.75rem', fontWeight: 600, opacity: disabled ? 0.55 : 1, whiteSpace: 'nowrap', transition: 'opacity 0.2s' }}>{children}</button>
+    return <button onClick={onClick} disabled={disabled} style={{ flex: '1 1 auto', padding: '7px 10px', borderRadius: 8, border: `1px solid ${c.bor}`, cursor: disabled ? 'not-allowed' : 'pointer', background: c.bg, color: c.txt, fontSize: '0.75rem', fontWeight: 600, opacity: disabled ? 0.55 : 1, whiteSpace: 'nowrap', transition: 'opacity 0.2s', textAlign: 'center' }}>{children}</button>
 }
 function Chip({ children }) {
     return <span style={{ padding: '2px 8px', borderRadius: 999, fontSize: '0.7rem', fontWeight: 600, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', color: '#64748b' }}>{children}</span>

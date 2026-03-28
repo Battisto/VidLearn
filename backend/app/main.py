@@ -6,7 +6,7 @@ from loguru import logger
 from app.core.config import settings
 from app.core.database import connect_db, disconnect_db
 from app.core.logging import setup_logging
-from app.routes import health, videos, summaries, quizzes, translations, users
+from app.routes import health, videos, quizzes, translations, users
 
 
 @asynccontextmanager
@@ -22,10 +22,14 @@ async def lifespan(app: FastAPI):
     from concurrent.futures import ThreadPoolExecutor
     from app.services.transcription_service import load_whisper_model
     try:
+        engine = settings.WHISPER_ENGINE
+        model  = settings.WHISPER_MODEL
+        logger.info(f"⚡ Pre-loading Whisper | engine={engine} | model={model} ...")
         executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="whisper_preload")
         loop = asyncio.get_event_loop()
-        await loop.run_in_executor(executor, load_whisper_model, settings.WHISPER_MODEL)
+        await loop.run_in_executor(executor, load_whisper_model, model)
         executor.shutdown(wait=False)
+        logger.info(f"✅ Whisper pre-loaded | engine={engine} | model={model}")
     except Exception as e:
         logger.warning(f"⚠️  Whisper pre-load skipped: {e} (will load on first use)")
 
@@ -59,7 +63,6 @@ def create_app() -> FastAPI:
     app.include_router(health.router,        prefix="/api",          tags=["Health"])
     app.include_router(users.router,         prefix="/api/users",     tags=["Users"])
     app.include_router(videos.router,        prefix="/api/videos",    tags=["Videos"])
-    app.include_router(summaries.router,     prefix="/api/summaries", tags=["Summaries"])
     app.include_router(quizzes.router,       prefix="/api/quizzes",   tags=["Quizzes"])
     app.include_router(translations.router,  prefix="/api/translate", tags=["Translations"])
 

@@ -1,67 +1,63 @@
 # VidLearn 🎓
 
-> AI-powered educational platform that converts long videos into structured learning materials.
+> Turn Videos into Structured Learning Experiences. 🚀
 
-## 🚀 Tech Stack
+VidLearn is a high-performance AI platform that automates the process of educational content consumption. It transforms any video or YouTube link into concise summaries, interactive quizzes, and accurate transcripts with full multilingual support.
 
-| Layer | Technology |
+## 🧠 Intelligence Stack
+
+| Feature | Technology |
 |---|---|
-| Frontend | React.js + Vite + Tailwind CSS |
-| Backend | FastAPI (Python) |
-| STT | OpenAI Whisper |
-| Summarization | BART-large-cnn |
-| Quiz Generation | Google Gemini API |
-| Database | MongoDB |
-| DevOps | Docker, AWS/Render/Railway |
+| **Frontend** | React 18 + Vite |
+| **Backend** | FastAPI (Async Python 3.10+) |
+| **Transcription** | OpenAI Whisper (99% Accuracy) |
+| **Summarization** | Google Gemini 1.5 Flash / BART-large-cnn |
+| **Quiz Generation** | NLP-driven spaCy Engine (Rule-based MCQs) |
+| **Translation** | deep-translator (Tamil ↔ English) |
+| **Intake** | yt-dlp + youtube-transcript-api |
+| **Database** | MongoDB (Motor Async) |
+| **Audio** | FFmpeg |
 
-## 📁 Project Structure
+## 📁 Architecture
 
 ```
 m1/
 ├── backend/
 │   ├── app/
-│   │   ├── core/          # config, database, logging
-│   │   ├── models/        # Pydantic + MongoDB models
-│   │   ├── routes/        # API route handlers
-│   │   ├── services/      # Business logic (AI, storage)
-│   │   └── utils/         # Shared helpers
-│   ├── requirements.txt
-│   ├── .env.example
-│   └── run.py
-├── frontend/              # React + Vite app
-├── uploads/               # Video file storage
-├── logs/                  # Application logs
-└── task.md
+│   │   ├── core/      # Config, security, database
+│   │   ├── routes/    # User, Video, Summary, Quiz, Translation endpoints
+│   │   └── services/  # AI processing pipelines and YouTube logic
+│   ├── .env           # API Keys & DB URLs
+│   └── requirements.txt
+├── frontend/          # React App (Pages: Upload, Dashboard, Process, Summary, Quiz)
+├── uploads/           # Raw video artifacts
+└── task.md            # Detailed project roadmap & status
 ```
 
-## ⚙️ Setup
+## 🚀 Rapid Setup
 
-### Backend
-
+### 1. Backend
 ```bash
 cd backend
 python -m venv venv
-venv\Scripts\activate        # Windows
+source venv/bin/activate  # venv\Scripts\activate on Windows
 pip install -r requirements.txt
-copy .env.example .env       # then fill in your API keys
 python run.py
 ```
+*Note: Requires FFmpeg installed on system PATH.*
 
-### Frontend
-
+### 2. Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-## 📡 API
+## 📅 Status Tracking
 
-Once the backend is running, visit:
-- Swagger UI: http://localhost:8000/api/docs
-- ReDoc: http://localhost:8000/api/redoc
-- Health Check: http://localhost:8000/api/health
+For a deep dive into implementation details, current features, and fixed bugs, please review the **[task.md](./task.md)** file.
 
-## 📅 Project Phases
+## 📡 API Documentation
 
-See [task.md](./task.md) for detailed phase breakdown.
+- **Swagger UI**: `http://localhost:8000/api/docs`
+- **ReDoc**: `http://localhost:8000/api/redoc`

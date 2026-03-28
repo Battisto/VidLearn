@@ -77,6 +77,13 @@ function uploadWithProgress(file, title, description, onProgress) {
         xhr.addEventListener('abort', () => reject(new Error('Upload was cancelled.')))
 
         xhr.open('POST', `${API_BASE}/videos/upload`)
+        
+        // Add Authorization header if token exists
+        const token = localStorage.getItem('token')
+        if (token) {
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`)
+        }
+
         xhr.send(formData)
     })
 }

@@ -11,6 +11,10 @@ export default function TranscriptPage() {
     const [error, setError] = useState(null)
     const [activeTab, setActiveTab] = useState('text')  // 'text' | 'segments'
     const [copied, setCopied] = useState(false)
+    const [lang, setLang] = useState('en')
+    const [translating, setTranslating] = useState(false)
+    const [translatedText, setTranslatedText] = useState(null)
+    const [transError, setTransError] = useState(null)
 
     useEffect(() => {
         const fetchTranscript = async () => {
@@ -29,11 +33,37 @@ export default function TranscriptPage() {
     }, [id])
 
     const handleCopy = () => {
-        if (!data?.transcript) return
-        navigator.clipboard.writeText(data.transcript).then(() => {
+        const textToCopy = lang === 'ta' && translatedText ? translatedText : data?.transcript
+        if (!textToCopy) return
+        navigator.clipboard.writeText(textToCopy).then(() => {
             setCopied(true)
             setTimeout(() => setCopied(false), 2000)
         })
+    }
+
+    const toggleLanguage = async () => {
+        if (lang === 'en') {
+            if (translatedText) {
+                setLang('ta')
+                return
+            }
+            // Fetch translation
+            setTranslating(true)
+            setTransError(null)
+            try {
+                // Pre-pend 'TRANSCRIPT' prefix to videoId so summary and transcript translations don't collide
+                const res = await api.translations.translateText(data.transcript, 'en', 'ta', `trans_${id}`)
+                setTranslatedText(res.translated_text)
+                setLang('ta')
+                setActiveTab('text') // Force text tab since segments won't be translated perfectly
+            } catch (err) {
+                setTransError('Failed to translate: ' + err.message)
+            } finally {
+                setTranslating(false)
+            }
+        } else {
+            setLang('en')
+        }
     }
 
     const formatTime = (secs) => {
@@ -110,7 +140,7 @@ export default function TranscriptPage() {
                             key={tab}
                             onClick={() => setActiveTab(tab)}
                             style={{
-                                padding: '8px 20px', borderRadius: 8, cursor: 'pointer', border: 'none',
+                                padding: '8px 20px', borderRadius: 8, cursor: 'pointer',
                                 background: activeTab === tab ? 'rgba(108,99,255,0.2)' : 'rgba(255,255,255,0.05)',
                                 border: `1px solid ${activeTab === tab ? 'rgba(108,99,255,0.5)' : 'rgba(255,255,255,0.1)'}`,
                                 color: activeTab === tab ? '#a78bfa' : '#94a3b8',
@@ -120,7 +150,21 @@ export default function TranscriptPage() {
                             {tab === 'text' ? '📄 Full Text' : '🕐 Timed Segments'}
                         </button>
                     ))}
-                    <div style={{ marginLeft: 'auto' }}>
+                    <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                        {transError && <span style={{ color: '#f87171', fontSize: '0.8rem' }}>{transError}</span>}
+                        <button
+                            onClick={toggleLanguage}
+                            disabled={translating}
+                            style={{
+                                padding: '8px 16px', borderRadius: 8, cursor: translating ? 'wait' : 'pointer',
+                                background: lang === 'ta' ? 'rgba(167,139,250,0.15)' : 'rgba(255,255,255,0.05)',
+                                border: `1px solid ${lang === 'ta' ? 'rgba(167,139,250,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                                color: lang === 'ta' ? '#c4b5fd' : '#94a3b8', fontSize: '0.875rem', fontWeight: 600,
+                                display: 'flex', alignItems: 'center', gap: '0.4rem',
+                            }}
+                        >
+                            {translating ? '⏳ Translating...' : lang === 'ta' ? '🌐 View original (EN)' : '🌐 Translate to Tamil'}
+                        </button>
                         <button onClick={handleCopy} style={{
                             ...backBtn,
                             background: copied ? 'rgba(34,197,94,0.15)' : 'rgba(255,255,255,0.05)',
@@ -144,7 +188,7 @@ export default function TranscriptPage() {
                             color: '#cbd5e1', lineHeight: 1.85, fontSize: '0.95rem',
                             whiteSpace: 'pre-wrap', fontFamily: 'inherit',
                         }}>
-                            {data.transcript}
+                            {lang === 'ta' ? translatedText : data.transcript}
                         </p>
                     )}
 

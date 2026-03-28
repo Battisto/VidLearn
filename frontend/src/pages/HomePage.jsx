@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
 
 const FEATURES = [
     { icon: '🎙️', title: 'AI Transcription', desc: 'OpenAI Whisper converts your video audio to accurate text automatically.' },
@@ -11,6 +13,7 @@ const FEATURES = [
 
 export default function HomePage() {
     const navigate = useNavigate()
+    const { user } = useContext(AuthContext)
 
     return (
         <div style={{ paddingTop: 80 }}>
@@ -27,7 +30,7 @@ export default function HomePage() {
                     fontSize: '0.8rem', color: '#a78bfa', fontWeight: 600,
                     marginBottom: '1.5rem', letterSpacing: '0.04em',
                 }}>
-                    🚀 AI-POWERED LEARNING
+                    AI-POWERED LEARNING
                 </div>
 
                 <h1 style={{
@@ -47,41 +50,82 @@ export default function HomePage() {
                     transcripts, summaries, quizzes, and translations — all powered by AI.
                 </p>
 
-                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                    <button
-                        onClick={() => navigate('/upload')}
-                        style={{
-                            padding: '14px 32px', borderRadius: 10, border: 'none',
-                            background: 'linear-gradient(135deg, #6c63ff, #a855f7)',
-                            color: '#fff', fontSize: '1rem', fontWeight: 700,
-                            cursor: 'pointer', letterSpacing: '0.02em',
-                            boxShadow: '0 4px 20px rgba(108,99,255,0.4)',
-                            transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-                        }}
-                        onMouseEnter={e => {
-                            e.target.style.transform = 'translateY(-2px)'
-                            e.target.style.boxShadow = '0 8px 30px rgba(108,99,255,0.5)'
-                        }}
-                        onMouseLeave={e => {
-                            e.target.style.transform = 'translateY(0)'
-                            e.target.style.boxShadow = '0 4px 20px rgba(108,99,255,0.4)'
-                        }}
-                    >
-                        📤 Upload a Video
-                    </button>
-                    <button
-                        onClick={() => navigate('/videos')}
-                        style={{
-                            padding: '14px 32px', borderRadius: 10, cursor: 'pointer',
-                            background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)',
-                            color: '#e2e8f0', fontSize: '1rem', fontWeight: 600,
-                            transition: 'all 0.15s ease',
-                        }}
-                        onMouseEnter={e => { e.target.style.background = 'rgba(255,255,255,0.1)' }}
-                        onMouseLeave={e => { e.target.style.background = 'rgba(255,255,255,0.05)' }}
-                    >
-                        🎬 Browse Videos
-                    </button>
+                <div style={{ display: 'flex', gap: '1.25rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    {user ? (
+                        <>
+                            <button
+                                onClick={() => navigate('/upload')}
+                                style={{
+                                    padding: '14px 32px', borderRadius: 12, border: 'none',
+                                    background: 'linear-gradient(135deg, #6c63ff, #a855f7)',
+                                    color: '#fff', fontSize: '1rem', fontWeight: 700,
+                                    cursor: 'pointer', letterSpacing: '0.02em',
+                                    boxShadow: '0 4px 20px rgba(108,99,255,0.4)',
+                                    transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                                }}
+                                onMouseEnter={e => {
+                                    e.target.style.transform = 'scale(1.05) translateY(-2px)'
+                                    e.target.style.boxShadow = '0 8px 30px rgba(108,99,255,0.6)'
+                                }}
+                                onMouseLeave={e => {
+                                    e.target.style.transform = 'scale(1) translateY(0)'
+                                    e.target.style.boxShadow = '0 4px 20px rgba(108,99,255,0.4)'
+                                }}
+                            >
+                                📤 Upload a Video
+                            </button>
+                            <button
+                                onClick={() => navigate('/videos')}
+                                style={{
+                                    padding: '14px 32px', borderRadius: 12, cursor: 'pointer',
+                                    background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)',
+                                    color: '#e2e8f0', fontSize: '1rem', fontWeight: 600,
+                                    transition: 'all 0.2s ease',
+                                }}
+                                onMouseEnter={e => { e.target.style.background = 'rgba(255,255,255,0.1)'; e.target.style.borderColor = 'rgba(255,255,255,0.2)' }}
+                                onMouseLeave={e => { e.target.style.background = 'rgba(255,255,255,0.05)'; e.target.style.borderColor = 'rgba(255,255,255,0.12)' }}
+                            >
+                                🎬 Browse Videos
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <button
+                                onClick={() => navigate('/register')}
+                                style={{
+                                    padding: '14px 36px', borderRadius: 12, border: 'none',
+                                    background: 'linear-gradient(135deg, #6366f1, #a855f7)',
+                                    color: '#fff', fontSize: '1rem', fontWeight: 700,
+                                    cursor: 'pointer', letterSpacing: '0.02em',
+                                    boxShadow: '0 4px 20px rgba(99,102,241,0.4)',
+                                    transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                                }}
+                                onMouseEnter={e => {
+                                    e.target.style.transform = 'scale(1.05) translateY(-2px)'
+                                    e.target.style.boxShadow = '0 8px 30px rgba(99,102,241,0.6)'
+                                }}
+                                onMouseLeave={e => {
+                                    e.target.style.transform = 'scale(1) translateY(0)'
+                                    e.target.style.boxShadow = '0 4px 20px rgba(99,102,241,0.4)'
+                                }}
+                            >
+                                Get Started for Free
+                            </button>
+                            <button
+                                onClick={() => navigate('/login')}
+                                style={{
+                                    padding: '14px 36px', borderRadius: 12, cursor: 'pointer',
+                                    background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)',
+                                    color: '#e2e8f0', fontSize: '1rem', fontWeight: 600,
+                                    transition: 'all 0.2s ease',
+                                }}
+                                onMouseEnter={e => { e.target.style.background = 'rgba(255,255,255,0.08)'; e.target.style.borderColor = 'rgba(255,255,255,0.2)' }}
+                                onMouseLeave={e => { e.target.style.background = 'rgba(255,255,255,0.03)'; e.target.style.borderColor = 'rgba(255,255,255,0.1)' }}
+                            >
+                                Sign In
+                            </button>
+                        </>
+                    )}
                 </div>
             </section>
 
