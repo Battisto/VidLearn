@@ -52,11 +52,11 @@ class Settings(BaseSettings):
     CHUNK_TOKENS: int = 1200               # tokens per chunk (was 800) — bigger = fewer chunks
     CHUNK_OVERLAP: int = 150               # overlap tokens (was 100)
 
-    # ── Summarisation (Phase 6) ───────────────────────────────────────────────
+    # ─── Summarisation (Phase 6) ───────────────────────────────────────────────
     SUMMARIZER_PROVIDER: str = "gemini"      # "gemini" | "bart"
     GOOGLE_GEMINI_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-1.5-flash"   # chunk summarisation — fast + free tier
-    GEMINI_MERGE_MODEL: str = "gemini-1.5-pro"  # final merge — higher quality for long videos
+    GEMINI_MODEL: str = "gemini-flash-latest"   # chunk summarisation — fast + free tier
+    GEMINI_MERGE_MODEL: str = "gemini-pro-latest"  # final merge — higher quality for long videos
     GEMINI_MAX_CONCURRENT: int = 5          # parallel Gemini requests (respects 60 req/min free tier)
     GEMINI_RETRY_ATTEMPTS: int = 3          # exponential-backoff retries on 429/503
     BART_MODEL: str = "facebook/bart-large-cnn"

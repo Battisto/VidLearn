@@ -48,10 +48,10 @@ export default function ProcessingPage() {
     const [selectedLevel, setSelectedLevel] = useState('standard')
 
     const LEVELS = [
-        { id: 'brief', icon: '📌', label: 'Brief', desc: '3–5 sentence overview' },
-        { id: 'standard', icon: '📝', label: 'Standard', desc: 'Balanced key points' },
-        { id: 'detailed', icon: '📖', label: 'Detailed', desc: 'Examples & explanations' },
-        { id: 'comprehensive', icon: '🌟', label: 'Comprehensive', desc: 'Structured full report' },
+        { id: 'brief', icon: '', label: 'Brief', desc: '3–5 sentence overview' },
+        { id: 'standard', icon: '', label: 'Standard', desc: 'Balanced key points' },
+        { id: 'detailed', icon: '', label: 'Detailed', desc: 'Examples & explanations' },
+        { id: 'comprehensive', icon: '', label: 'Comprehensive', desc: 'Structured full report' },
     ]
 
     const pollRef = useRef(null)
@@ -109,7 +109,7 @@ export default function ProcessingPage() {
         setSummarizing(true)
         setSummError(null)
         try {
-            await api.videos.summarize(id, 'bart', selectedLevel)
+            await api.videos.summarize(id, 'gemini', selectedLevel)
             navigate(`/videos/${id}/summary`, { replace: true })
         } catch (err) {
             setSummError(err.message)
@@ -129,7 +129,7 @@ export default function ProcessingPage() {
                 {/* ── Header ── */}
                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                     <div style={{ fontSize: '3.5rem', marginBottom: '0.75rem' }}>
-                        {isFailed ? '❌' : preprocessingDone ? '📄' : '⚙️'}
+                        {isFailed ? '❌' : preprocessingDone ? '' : ''}
                     </div>
                     <h1 style={headingStyle}>
                         {isFailed
@@ -336,11 +336,11 @@ export default function ProcessingPage() {
                             }}
                         >
                             {summarizing
-                                ? `🤗 Summarizing (${LEVELS.find(l => l.id === selectedLevel)?.label})${dots}`
-                                : `🤗 Summarize • ${LEVELS.find(l => l.id === selectedLevel)?.label} →`}
+                                ? ` Summarizing (${LEVELS.find(l => l.id === selectedLevel)?.label})${dots}`
+                                : ` Summarize • ${LEVELS.find(l => l.id === selectedLevel)?.label} →`}
                         </button>
                         <p style={{ color: '#475569', fontSize: '0.72rem', textAlign: 'center', marginTop: '0.5rem' }}>
-                            facebook/bart-large-cnn • running locally
+                            Google Gemini Flash • running in cloud
                         </p>
                     </div>
                 )}
