@@ -1,63 +1,147 @@
-# VidLearn 🎓
+# VidLearn 🎓 - Intelligent Video Learning Ecosystem
 
 > Turn Videos into Structured Learning Experiences. 🚀
 
-VidLearn is a high-performance AI platform that automates the process of educational content consumption. It transforms any video or YouTube link into concise summaries, interactive quizzes, and accurate transcripts with full multilingual support.
+VidLearn is a high-performance, cutting-edge AI platform that automates the process of educational content consumption. It transforms any raw video file or YouTube link into concise summaries, interactive quizzes, and accurate transcripts with full multilingual support.
 
-## 🧠 Intelligence Stack
+## 🌟 Overview
+VidLearn transforms traditional video watching into an interactive, data-driven learning ecosystem. Our platform combines on-the-fly AI processing, NLP analysis, and multilingual capabilities to optimize content retention, making learning more efficient and accessible.
 
-| Feature | Technology |
-|---|---|
-| **Frontend** | React 18 + Vite |
-| **Backend** | FastAPI (Async Python 3.10+) |
-| **Transcription** | OpenAI Whisper (99% Accuracy) |
-| **Summarization** | Google Gemini 1.5 Flash / BART-large-cnn |
-| **Quiz Generation** | NLP-driven spaCy Engine (Rule-based MCQs) |
-| **Translation** | deep-translator (Tamil ↔ English) |
-| **Intake** | yt-dlp + youtube-transcript-api |
-| **Database** | MongoDB (Motor Async) |
-| **Audio** | FFmpeg |
+## ✨ Key Features
 
-## 📁 Architecture
+### Media Ingestion & Processing
+- **Universal Input**: Seamlessly process direct video uploads or parse YouTube URLs.
+- **Audio Extraction**: High-fidelity audio extraction and optimization powered by FFmpeg.
+- **Artifact Management**: Secure and efficient handling of video and audio uploads.
 
-```
-m1/
-├── backend/
-│   ├── app/
-│   │   ├── core/      # Config, security, database
-│   │   ├── routes/    # User, Video, Summary, Quiz, Translation endpoints
-│   │   └── services/  # AI processing pipelines and YouTube logic
-│   ├── .env           # API Keys & DB URLs
-│   └── requirements.txt
-├── frontend/          # React App (Pages: Upload, Dashboard, Process, Summary, Quiz)
-├── uploads/           # Raw video artifacts
-└── task.md            # Detailed project roadmap & status
-```
+### AI-Powered Transcription
+- **Speech-to-Text**: High-accuracy transcription utilizing OpenAI's Whisper model (up to 99% accuracy).
+- **Time-Synced Subtitles**: Generating precise timestamps for seamless video navigation and contextual referencing.
 
-## 🚀 Rapid Setup
+### Intelligent Summarization
+- **Cognitive Analysis**: Leverages Google Gemini 1.5 Flash or BART-large-cnn for concise, context-aware summaries.
+- **Key Takeaways**: Automatically extracts the most crucial concepts from long-form educational content.
 
-### 1. Backend
+### Interactive Assessments
+- **Quiz Generation**: NLP-driven spaCy Engine creates targeted, rule-based multiple-choice questions directly from the video context.
+- **Knowledge Validation**: Helps users test their understanding immediately after consuming the content, reinforcing memory retention.
+
+### Multilingual Support
+- **Cross-Language Translation**: Seamless translation between English and Tamil utilizing deep-translator.
+- **Global Accessibility**: Breaking down language barriers to make educational content accessible to a wider audience.
+
+## 🛠️ Tech Stack
+
+**Frontend**: React 18 + Vite
+**Backend**: FastAPI (Async Python 3.10+)
+**AI & Processing**: OpenAI Whisper, Google Gemini 1.5 Flash / BART-large-cnn, spaCy
+**Media Utilities**: yt-dlp, youtube-transcript-api, FFmpeg
+**Database**: MongoDB (Motor Async)
+**Translation**: deep-translator
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18.0+
+- Python 3.10+
+- FFmpeg installed and configured in system PATH
+- MongoDB instance (local or Atlas)
+
+### Installation
+
+**1. Configure Backend**
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate  # venv\Scripts\activate on Windows
-pip install -r requirements.txt
-python run.py
-```
-*Note: Requires FFmpeg installed on system PATH.*
 
-### 2. Frontend
+# Activate virtual environment
+# On Windows:
+venv\Scripts\activate
+# On Unix/MacOS:
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment
+# Ensure you have your .env file setup with necessary API keys (OpenAI, Gemini) and DB URL
+```
+
+**2. Configure Frontend**
+```bash
+cd ../frontend
+npm install
+```
+
+### Start the Development Servers
+
+**Terminal 1: Start Backend Server**
+```bash
+cd backend
+# Ensure venv is activated
+.\venv\Scripts\python.exe -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Terminal 2: Start Frontend Server**
 ```bash
 cd frontend
-npm install
 npm run dev
 ```
 
-## 📅 Status Tracking
+Access the application:
+- Frontend: `http://localhost:5173` (or as specified by Vite)
+- Backend API Docs: `http://localhost:8000/api/docs`
 
-For a deep dive into implementation details, current features, and fixed bugs, please review the **[task.md](./task.md)** file.
+## 📁 Project Structure
 
-## 📡 API Documentation
+```
+m1/
+├── backend/                    # Python Backend
+│   ├── app/
+│   │   ├── core/               # Configuration, security, database connectors
+│   │   ├── models/             # Database models (MongoDB/Motor)
+│   │   ├── routes/             # API route handlers
+│   │   └── services/           # AI pipelines and YouTube integration logic
+│   ├── .env                    # Environment variables (API Keys, DB URLs)
+│   ├── run.py                  # Main server entry point
+│   └── requirements.txt
+├── frontend/                   # React Frontend
+│   ├── src/                    # Pages: Upload, Dashboard, Process, Summary, Quiz
+│   └── package.json
+├── uploads/                    # Raw video and audio artifacts storage
+└── task.md                     # Detailed project roadmap & status
+```
+
+## 🔌 API Documentation
+
+Detailed, interactive API documentation is automatically generated by FastAPI.
 
 - **Swagger UI**: `http://localhost:8000/api/docs`
 - **ReDoc**: `http://localhost:8000/api/redoc`
+
+### Core Endpoints
+
+#### Video Processing
+- `POST /api/videos/upload` - Upload a local video file
+- `POST /api/videos/youtube` - Ingest a YouTube URL
+
+#### Content Generation
+- `GET /api/videos/{video_id}/summary` - Retrieve AI-generated summaries
+- `GET /api/videos/{video_id}/quiz` - Retrieve generated assessment questions
+- `GET /api/videos/{video_id}/translate` - Get translated content (e.g., to Tamil)
+
+## 🔧 Troubleshooting & FAQ
+
+### Common Issues
+
+**Problem: FFmpeg not recognized**
+- **Solution**: Ensure FFmpeg is installed and the directory containing the executable is added to your system's PATH. Restart your terminal after adding it.
+
+**Problem: API or AI Service Errors**
+- **Solution**: Verify that your `backend/.env` file contains valid API keys for OpenAI and Gemini and that you haven't hit rate limits. 
+
+**Problem: Database Connection Failed**
+- **Solution**: Check your `MONGODB_URL` in the `.env` file. Ensure your local MongoDB is running or your Atlas cluster correctly whitelists your IP.
+
+## 📝 Status Tracking
+For a deep dive into implementation details, current features, and fixed bugs, please review the **[task.md](./task.md)** file.
